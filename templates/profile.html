@@ -22,7 +22,7 @@
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<a class="navbar-brand" href="#">
-			<img src="img/Logo.svg" alt="CakeBake">
+			<img src="{% static 'img/Logo.svg' %}" alt="CakeBake">
 		</a>
 		<div class="collapse navbar-collapse justify-content-end" id="navbar">
 			<ul class="navbar-nav">
@@ -44,11 +44,11 @@
 				</li>
 				<li class="nav-item d-flex align-items-center">
 					<a class="nav-link fw-lighter me-1 cake_blue position-relative" href="#">
-						<img src="img/shopping-cart.svg" alt="">
+						<img src="{% static 'img/shopping-cart.svg' %}" alt="">
 						<span class="position-absolute translate-middle badge rounded-pill cake__bg_pink fs_8">1</span>
 					</a>
 					<a class="nav-link fw-lighter me-1 cake_blue position-relative" href="#">
-						<img src="img/user.svg" alt="">
+						<img src="{% static 'img/user.svg' %}" alt="">
 						<span class="position-absolute translate-middle badge rounded-pill cake__bg_pink fs_8">1</span>
 					</a>
 					<a class="nav-link fw-lighter cake_grey fs_12" href="#">
@@ -62,7 +62,7 @@
 <div class="container mt-header mb-5">
 	<div class="row mt-5">
 		<div class="col-12 col-xxl-6 d-flex justify-content-center">
-			<div><img src="img/Cake2.png" alt=""></div>
+			<div><img src="{% static 'img/Cake2.png' %}" alt=""></div>
 		</div>
 		<div class="col-12 col-xxl-6 d-flex flex-column justify-content-center align-items-center align-items-xxl-start" id="LK">
 			<form class="d-none">
@@ -124,6 +124,6 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<script src="lk.js"></script>
+<script src="{% static 'js/lk.js' %}"></script>
 </body>
 </html>
