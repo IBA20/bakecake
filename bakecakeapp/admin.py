@@ -10,4 +10,3 @@ class OrderAdmin(admin.ModelAdmin):
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
     pass
-
