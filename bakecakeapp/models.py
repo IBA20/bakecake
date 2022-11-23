@@ -1,7 +1,7 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.conf import settings
 from django.utils import timezone
-from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
 
@@ -20,10 +20,10 @@ class Order(models.Model):
         RECTANGLE = 'RC', _('Прямоугольник')
 
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
-        related_name='users',
+        related_name='orders',
         verbose_name='Клиент',
     )
     levels = models.IntegerField(
@@ -38,7 +38,7 @@ class Order(models.Model):
         db_index=True
     )
     ingredients = models.ManyToManyField(
-        Ingredient,
+        'Ingredient',
         related_name='orders_used_in',
         verbose_name='Ингредиент',
         blank=True)
