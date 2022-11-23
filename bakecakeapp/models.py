@@ -22,6 +22,7 @@ class Order(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
+        null=True,
         related_name='users',
         verbose_name='Клиент',
     )
@@ -36,6 +37,11 @@ class Order(models.Model):
         default=Shape.CIRCLE,
         db_index=True
     )
+    ingredients = models.ManyToManyField(
+        Ingredient,
+        related_name='orders_used_in',
+        verbose_name='Ингредиент',
+        blank=True)
     writing = models.CharField(
         'Надпись',
         max_length=50,
@@ -85,12 +91,6 @@ class Ingredient(models.Model):
         BERRIES = 'BR', _('Ягоды')
         DECOR = 'DC', _('Декор')
 
-    order = models.ForeignKey(
-        Order,
-        on_delete=models.CASCADE,
-        related_name='ingredients',
-        verbose_name='заказ',
-    )
     name = models.CharField(
         'Название',
         max_length=30,
