@@ -11,8 +11,6 @@ class OrderAdmin(admin.ModelAdmin):
         'created_at',
         'paid',
         'value',
-        'levels',
-        'shape',
         'delivery_address',
         'delivery_time'
     )

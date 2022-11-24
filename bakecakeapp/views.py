@@ -4,16 +4,21 @@ from django.shortcuts import render
 
 from bakecakeapp.models import Order, Ingredient
 from users.models import CustomUser
+from .forms import CreateCakeForm
 
 
 def index(request):
+    cake_form = CreateCakeForm()
+
     if request.method == 'POST':
         # TODO добавить валидацию формы
         if request.user.is_authenticated:
             user = request.user
         else:
             try:
-                user = CustomUser.objects.get(phonenumber=request.POST['PHONE'])
+                user = CustomUser.objects.get(
+                    phonenumber=request.POST['PHONE']
+                )
             except CustomUser.DoesNotExist:
                 user = CustomUser.objects.create_user(
                     phonenumber=request.POST['PHONE'],
@@ -27,11 +32,13 @@ def index(request):
             writing=request.POST['WORDS'],
             comments=request.POST['COMMENTS'],
             delivery_address=request.POST['ADDRESS'],
-            delivery_time=datetime.fromisoformat(f"{request.POST['DATE']}T{request.POST['TIME']}"),
+            delivery_time=datetime.fromisoformat(
+                f"{request.POST['DATE']}T{request.POST['TIME']}"),
             courier_info=request.POST['DELIVCOMMENTS'],
             value=999,
         )
-        order.ingredients.add(Ingredient.objects.get(id=request.POST['TOPPING']))
+        order.ingredients.add(
+            Ingredient.objects.get(id=request.POST['TOPPING']))
         berries = request.POST.get('BERRIES')
         decor = request.POST.get('DECOR')
         if berries:
@@ -39,7 +46,9 @@ def index(request):
         if decor:
             order.ingredients.add(Ingredient.objects.get(id=decor))
 
-    context = {}
+    context = {
+        'cake_form': cake_form,
+    }
     return render(request, 'index.html', context)
 
 

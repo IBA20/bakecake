@@ -178,6 +178,50 @@
 		<article id="VueApp">
 			<section class="row pt-header" id="step3">
 				<h2 class="font_Gogh fs_40 cake_blue text-center">Создать свой торт</h2>
+				<!-- myform --> 
+
+
+					<p><label class="form-label" for="{{ form.cat.id_for_label }}">{{form.cat.label}}: </label>{{ form.cat }}</p>
+<div class="form-error">{{ form.cat.errors }}</div>
+
+
+				<v-form :validation-schema="schema1" @submit="ToStep4">
+				<div class="d-flex justify-content-end align-items-center position-relative">
+					<span class="cake_pink position-absolute start-0 top-50">
+						<error-message name="lvls" class="from__alert"></error-message>
+						<error-message name="form" class="from__alert"></error-message>
+						<error-message name="topping" class="from__alert"></error-message>
+					</span>
+					<span class="z-index-1 fs_40 cake_pink text-end mt-5" id="cost">{{ Cost }}₽</span>
+				</div>
+				<div class="d-flex align-items-center flex-wrap mb-3">
+					<span class="me-3 fs_40 cake_blue">{{ cake_form.topping.label }}</span>
+					{% for topping in cake_form.topping %}
+						<label>
+							<v-field v-model="Topping" type="radio" name="topping" id="topping{{ forloop.counter }}" value="{{ topping.data.value }}" class="d-none cake__input"></v-field> 
+							<label for="topping{{ forloop.counter }}" class="mx-2 px-3 py-1 cake_grey cake__label">{{ topping.choice_label }}</label>
+						</label>
+					{% endfor %}
+				</div>
+				<div class="d-flex align-items-center flex-wrap mb-3">
+					<span class="me-3 fs_40 cake_blue">{{ cake_form.berries.label }}</span>
+					{% for berries in cake_form.berries %}
+						<label>
+							<v-field v-model="Berries" type="radio" name="berries" id="berries{{ forloop.counter }}" value="{{ berries.data.value }}" class="d-none cake__input"></v-field> 
+							<label for="berries{{ forloop.counter }}" class="mx-2 px-3 py-1 cake_grey cake__label">{{ berries.choice_label }}</label>
+						</label>
+					{% endfor %}
+
+				</div>
+
+				<div class="d-flex justify-content-end">
+					<button type="submit" class="btn text-white rounded-pill mt-3 shadow-none cake__button cake__bg_pink">Подтвердить</button>
+					<a href="#step4" ref="ToStep4" class="d-none"></a>
+				</div>
+				</v-form>
+				<!-- myform --> 
+
+
 				<v-form :validation-schema="schema1" @submit="ToStep4">
 					<div class="d-flex justify-content-end align-items-center position-relative">
 				<span class="cake_pink position-absolute start-0 top-50">
