@@ -313,16 +313,18 @@
 							</div>
 							<div class="col-12 col-lg-4 d-flex justify-content-center justify-content-lg-end">
 								<div class="cake__card p-4 position-relative cake_grey">
-									<span class="cake__badge rounded-pill">?</span>
-									<span>Количество уровней: </span>
-									<span>Форма уровней: </span>
-									<p>Топинг: </p>
-									<span>Дополнительно:</span>
-									<ul>
-										<li>Ягоды: </li>
-										<li>Декор: </li>
-									</ul>
-									<span>Без надписи:</span>
+									{% verbatim %}
+										<span class="cake__badge rounded-pill">?</span>
+										<span>Количество уровней: {{ DATA.Levels[Levels] }}</span>
+										<span>Форма уровней: {{ DATA.Forms[Form] }}</span>
+										<p>Топинг: {{ DATA.Toppings[Topping] }}</p>
+										<span>Дополнительно:</span>
+										<ul>
+											<li>Ягоды: {{ DATA.Berries[Berries] }}</li>
+											<li>Декор: {{ DATA.Decors[Decor] }}</li>
+										</ul>
+										<span>{{ Words === '' ? 'Без надписи' : Words }}</span>
+									{% endverbatim %}
 								</div>
 							</div>
 						</div>
