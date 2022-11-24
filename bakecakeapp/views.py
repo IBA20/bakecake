@@ -3,6 +3,7 @@ from datetime import datetime
 from django.db.models import Sum
 from yookassa import Payment
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 from bakecakeapp.models import Order, Ingredient
 from users.models import CustomUser
@@ -84,6 +85,26 @@ def index(request):
     return render(request, 'index.html', context)
 
 
+@login_required()
 def profile(request):
-    context = {}
+    current_user = request.user
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        email = request.POST.get('email', '')
+        if name:
+            current_user.first_name = name
+        if email:
+            current_user.email = email
+        current_user.save()
+    current_user = request.user
+    orders = Order.objects.filter(user=current_user).prefetch_related('ingredients')
+    user_data = {
+        'phonenumber': str(current_user.phonenumber),
+        'email': current_user.email,
+        'name': current_user.first_name
+    }
+    context = {
+        'orders': orders,
+        'user_data': user_data
+    }
     return render(request, 'profile.html', context)
