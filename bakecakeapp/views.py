@@ -87,3 +87,26 @@ def index(request):
 def profile(request):
     context = {}
     return render(request, 'profile.html', context)
+
+
+def check_payment(request):  # Временный костыль для локального тестирования
+    if not request.user.is_authenticated:
+        return redirect('/')
+    pending_orders = Order.objects\
+        .filter(user=request.user, paid=False)\
+        .exclude(status='90')
+
+    for order in pending_orders:
+        payment_info = Payment.find_one(order.payment_id)
+        if payment_info.paid:
+            order.paid=True
+            order.save()
+        elif datetime.strptime(
+            payment_info.expires_at,
+            "%Y-%m-%dT%H:%M:%S.%fZ"
+        ) < datetime.now():
+            order.status = '90'
+            order.save()
+
+    return redirect('/profile')
+
