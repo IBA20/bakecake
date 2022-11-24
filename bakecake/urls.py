@@ -17,6 +17,7 @@ from bakecakeapp import views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.urls import path
 
 urlpatterns = [
@@ -24,5 +25,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('profile', views.profile, name='profile'),
     path('payment', views.check_payment, name='check_payment'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
