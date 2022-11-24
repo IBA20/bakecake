@@ -27,8 +27,6 @@ def index(request):
                 )
         order = Order.objects.create(
             user=user,
-            levels=int(request.POST['LEVELS']),
-            shape={'1': 'CR', '2': 'SQ', '3': 'RC'}[request.POST['FORM']],
             writing=request.POST['WORDS'],
             comments=request.POST['COMMENTS'],
             delivery_address=request.POST['ADDRESS'],
@@ -38,13 +36,20 @@ def index(request):
             value=999,
         )
         order.ingredients.add(
-            Ingredient.objects.get(id=request.POST['TOPPING']))
-        berries = request.POST.get('BERRIES')
-        decor = request.POST.get('DECOR')
+            Ingredient.objects.get(id=request.POST['topping']))
+        berries = request.POST.get('berries')
+        decor = request.POST.get('decor')
+        levels = request.POST.get('levels')
+        shape = request.POST.get('shape')
+
         if berries:
             order.ingredients.add(Ingredient.objects.get(id=berries))
         if decor:
             order.ingredients.add(Ingredient.objects.get(id=decor))
+        if levels:
+            order.ingredients.add(Ingredient.objects.get(id=levels))       
+        if shape:
+            order.ingredients.add(Ingredient.objects.get(id=shape))
 
     context = {
         'cake_form': cake_form,
