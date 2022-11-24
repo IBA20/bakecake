@@ -1,16 +1,40 @@
 from datetime import datetime
 
-from django.shortcuts import render
+from django.db.models import Sum
+from yookassa import Payment
+from django.shortcuts import render, redirect
 
 from bakecakeapp.models import Order, Ingredient
 from users.models import CustomUser
 from .forms import CreateCakeForm
 
 
+def create_payment(amount):
+    payment = Payment.create(
+        {
+            "amount": {
+                "value": str(amount),
+                "currency": "RUB"
+            },
+            "payment_method_data": {
+                "type": "bank_card"
+            },
+            "confirmation": {
+                "type": "redirect",
+                "return_url": "https://127.0.0.1"  # TODO put valid return url
+            },
+            "description": "Оплата: торт на заказ"
+        }
+    )
+    return payment.id, payment.confirmation.confirmation_url
+
+
 def index(request):
     cake_form = CreateCakeForm()
 
     if request.method == 'POST':
+        print(request.POST)
+
         # TODO добавить валидацию формы
         if request.user.is_authenticated:
             user = request.user
@@ -25,31 +49,34 @@ def index(request):
                     password='1234',
                     email=request.POST['EMAIL'],
                 )
-        order = Order.objects.create(
+        order = Order(
             user=user,
             writing=request.POST['WORDS'],
             comments=request.POST['COMMENTS'],
             delivery_address=request.POST['ADDRESS'],
             delivery_time=datetime.fromisoformat(
-                f"{request.POST['DATE']}T{request.POST['TIME']}"),
+                f"{request.POST['DATE']}T{request.POST['TIME']}"
+            ),
             courier_info=request.POST['DELIVCOMMENTS'],
-            value=999,
         )
-        order.ingredients.add(
-            Ingredient.objects.get(id=request.POST['topping']))
-        berries = request.POST.get('berries')
-        decor = request.POST.get('decor')
-        levels = request.POST.get('levels')
-        shape = request.POST.get('shape')
-
-        if berries:
-            order.ingredients.add(Ingredient.objects.get(id=berries))
-        if decor:
-            order.ingredients.add(Ingredient.objects.get(id=decor))
-        if levels:
-            order.ingredients.add(Ingredient.objects.get(id=levels))       
-        if shape:
-            order.ingredients.add(Ingredient.objects.get(id=shape))
+        ingred_fields = ['levels', 'topping', 'shape', 'berries', 'decor']
+        ingred_ids = [
+            int(request.POST.get(field)) for field in ingred_fields if
+            request.POST.get(field)
+        ]
+        print(ingred_ids)
+        order.value = Ingredient.objects\
+            .filter(id__in=ingred_ids)\
+            .aggregate(Sum('price'))['price__sum']
+        print('value: ', order.value)
+        payment_id, payment_url = create_payment(order.value)
+        order.payment_id = payment_id
+        order.save()
+        for _id in ingred_ids:
+            order.ingredients.add(
+                Ingredient.objects.get(id=_id)
+            )
+        return redirect(payment_url)
 
     context = {
         'cake_form': cake_form,
