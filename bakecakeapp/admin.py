@@ -19,5 +19,5 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
-    list_display = ('name', 'type', 'price')
+    list_display = ('id', 'name', 'type', 'price')
     list_filter = ('type',)

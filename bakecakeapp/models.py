@@ -100,4 +100,4 @@ class Ingredient(models.Model):
         verbose_name_plural = 'Ингредиенты'
 
     def __str__(self):
-        return f'{self.get_type_display()}: {self.name}'
+        return f'{self.name}'
