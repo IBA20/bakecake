@@ -105,14 +105,9 @@ Vue.createApp({
                 Berries: ['нет', 'Ежевика', 'Малина', 'Голубика', 'Клубника'],
                 Decors: [ 'нет', 'Фисташки', 'Безе', 'Фундук', 'Пекан', 'Маршмеллоу', 'Марципан']
             },
-            Costs: {
-                Levels: [0, 400, 750, 1100],
-                Forms: [0, 600, 400, 1000],
-                Toppings: [0, 0, 200, 180, 200, 300, 350, 200],
-                Berries: [0, 400, 300, 450, 500],
-                Decors: [0, 300, 400, 350, 300, 200, 280],
-                Words: 500
-            },
+            Costs: JSON.parse(
+                JSON.parse(document.getElementById('costs').textContent)),
+            Costs_words: 500,
             Levels: 0,
             Form: 0,
             Topping: 0,
@@ -139,10 +134,15 @@ Vue.createApp({
     },
     computed: {
         Cost() {
-            let W = this.Words ? this.Costs.Words : 0
-            return this.Costs.Levels[this.Levels] + this.Costs.Forms[this.Form] +
-                this.Costs.Toppings[this.Topping] + this.Costs.Berries[this.Berries] +
-                this.Costs.Decors[this.Decor] + W
+            let W = this.Words ? this.Costs_words : 0
+            
+            levels = parseFloat(this.Costs[this.Levels]) || 0
+            form = parseFloat(this.Costs[this.Form]) || 0
+            topping = parseFloat(this.Costs[this.Topping]) || 0
+            berries = parseFloat(this.Costs[this.Berries]) || 0
+            decor = parseFloat(this.Costs[this.Decor]) || 0
+
+            return levels + form + topping + berries + decor + W
         }
     }
 }).mount('#VueApp')

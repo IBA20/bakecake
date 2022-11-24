@@ -1,12 +1,14 @@
+import json
 from datetime import datetime
 
-from django.db.models import Sum
-from yookassa import Payment
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-
-from bakecakeapp.models import Order, Ingredient
+from django.db.models import Sum
+from django.shortcuts import redirect, render
 from users.models import CustomUser
+from yookassa import Payment
+
+from bakecakeapp.models import Ingredient, Order
+
 from .forms import CreateCakeForm
 
 
@@ -81,6 +83,8 @@ def index(request):
 
     context = {
         'cake_form': cake_form,
+        'costs': json.dumps(
+            {x.pk: x.price for x in Ingredient.objects.all()}, default=str)
     }
     return render(request, 'index.html', context)
 
@@ -97,7 +101,8 @@ def profile(request):
             current_user.email = email
         current_user.save()
     current_user = request.user
-    orders = Order.objects.filter(user=current_user).prefetch_related('ingredients')
+    orders = Order.objects.filter(
+        user=current_user).prefetch_related('ingredients')
     user_data = {
         'phonenumber': str(current_user.phonenumber),
         'email': current_user.email,
@@ -120,7 +125,7 @@ def check_payment(request):  # Временный костыль для лока
     for order in pending_orders:
         payment_info = Payment.find_one(order.payment_id)
         if payment_info.paid:
-            order.paid=True
+            order.paid = True
             order.save()
         elif datetime.strptime(
             payment_info.expires_at,
@@ -130,4 +135,3 @@ def check_payment(request):  # Временный костыль для лока
             order.save()
 
     return redirect('/profile')
-
