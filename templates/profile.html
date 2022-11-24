@@ -132,19 +132,6 @@
 								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 							</div>
 							<div class="modal-body">
-								{% for ingredient in order.ingredients %}
-								{% if ingredient.type == 'LV' %}
-								<span class="cake_blue">Уровней: {{ ingredient.name }}</span><br>
-								{% elif ingredient.type == 'SH' %}
-								<span class="cake_blue">Форма: {{ ingredient.name }}</span><br>
-								{% elif ingredient.type == 'TP' %}
-								<span class="cake_blue">Топпинг: {{ ingredient.name }}</span><br>
-								{% elif ingredient.type == 'BR' %}
-								<span class="cake_blue">Ягоды: {{ ingredient.name }}</span><br>
-								{% elif ingredient.type == 'DC' %}
-								<span class="cake_blue">Декор: {{ ingredient.name }}</span><br>
-								{% endif %}
-								{% endfor %}
 								<span class="cake_blue">{% if order.writing %}{{ order.writing }}{% else %}Без надписи{% endif %}</span><br>
 								<span class="cake_pink">Цена: {{order.value}}₽</span>
 							</div>
