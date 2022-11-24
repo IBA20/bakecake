@@ -14,28 +14,12 @@ class Order(models.Model):
         COMPLETED = '50', _('Исполнен')
         CANCELLED = '90', _('Отменен')
 
-    class Shape(models.TextChoices):
-        CIRCLE = 'CR', _('Круг')
-        SQUARE = 'SQ', _('Квадрат')
-        RECTANGLE = 'RC', _('Прямоугольник')
-
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         related_name='orders',
         verbose_name='Клиент',
-    )
-    levels = models.IntegerField(
-        'Уровни',
-        validators=[MinValueValidator(1), MaxValueValidator(3)]
-    )
-    shape = models.CharField(
-        'Форма',
-        max_length=2,
-        choices=Shape.choices,
-        default=Shape.CIRCLE,
-        db_index=True
     )
     ingredients = models.ManyToManyField(
         'Ingredient',
@@ -87,6 +71,8 @@ class Order(models.Model):
 
 class Ingredient(models.Model):
     class Type(models.TextChoices):
+        LEVELS = 'LV', _('Уровни')
+        SHAPE = 'SH', _('Форма')
         TOPPING = 'TP', _('Топпинг')
         BERRIES = 'BR', _('Ягоды')
         DECOR = 'DC', _('Декор')
