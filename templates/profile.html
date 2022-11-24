@@ -8,6 +8,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+	{{ user_data|json_script:"user_data" }}
+	<script> const user = JSON.parse(document.getElementById('user_data').textContent); </script>
 	<!-- Для разработки: -->
 	<script src="https://unpkg.com/vue@3"></script>
 	<!-- Для продакшина: -->
@@ -52,7 +54,7 @@
 						<span class="position-absolute translate-middle badge rounded-pill cake__bg_pink fs_8">1</span>
 					</a>
 					<a class="nav-link fw-lighter cake_grey fs_12" href="#">
-						Ирина
+						{{ user_data.name }}
 					</a>
 				</li>
 			</ul>
@@ -65,10 +67,9 @@
 			<div><img src="{% static 'img/Cake2.png' %}" alt=""></div>
 		</div>
 		<div class="col-12 col-xxl-6 d-flex flex-column justify-content-center align-items-center align-items-xxl-start" id="LK">
-			<form class="d-none">
-				<input v-model="Name" name="NAME">
-				<input v-model="Phone" name="PHONE">
-				<input v-model="Email" name="EMAIL">
+			<form method="POST" class="d-none"> {% csrf_token %}
+				<input v-model="Name" name="name">
+				<input v-model="Email" name="email">
 				<button type="submit" ref="HiddenFormSubmit">Apply Changes</button>
 			</form>
 			<v-form :validation-schema="Schema" @submit="ApplyChanges">
@@ -88,10 +89,10 @@
 				<div class="d-flex">
 					<ul class="list-group">
 						<li class="list-group-item border-0 ps-0">
-							<span class="fs_40 cake_blue">Имя</span>
+							<h1 class="fs_40 cake_blue">Телефон</h1>
 						</li>
 						<li class="list-group-item border-0 ps-0">
-							<h1 class="fs_40 cake_blue">Телефон</h1>
+							<span class="fs_40 cake_blue">Имя</span>
 						</li>
 						<li class="list-group-item border-0 ps-0">
 							<h1 class="fs_40 cake_blue">Почта</h1>
@@ -99,25 +100,69 @@
 					</ul>
 					<ul class="list-group">
 						<li class="list-group-item border-0 py-61 position-relative">
-							<v-field v-model="Name" type="text" name="name_format" id="name" :readonly="!Edit" class="form-control my-2 i cake__textinput"></v-field>
-							<error-message name="name_format" class="position-absolute bottom-0 cake_pink fs_12"></error-message>
-						</li>
-						<li class="list-group-item border-0 py-61 position-relative">
-							<v-field v-model="Phone" type="text" name="phone_format" id="phone" :readonly="!Edit" class="form-control my-2 cake__textinput"></v-field>
+							<v-field v-model="Phone" type="text" name="phone_format" id="phone" :readonly="true" class="form-control my-2 cake__textinput"></v-field>
 							<error-message name="phone_format" class="position-absolute bottom-0 cake_pink fs_12"></error-message>
 						</li>
 						<li class="list-group-item border-0 py-61 position-relative">
-							<v-field v-model="Email" type="text" name="email_format" id="email" :readonly="!Edit" class="form-control my-2 cake__textinput"></v-field>
+							<v-field v-model="Name" type="text" placeholder="Укажите имя" name="name_format" id="name" :readonly="!Edit" class="form-control my-2 i cake__textinput"></v-field>
+							<error-message name="name_format" class="position-absolute bottom-0 cake_pink fs_12"></error-message>
+						</li>
+						<li class="list-group-item border-0 py-61 position-relative">
+							<v-field v-model="Email" type="text" placeholder="Укажите email" name="email_format" id="email" :readonly="!Edit" class="form-control my-2 cake__textinput"></v-field>
 							<error-message name="email_format" class="position-absolute bottom-0 cake_pink fs_12"></error-message>
 						</li>
 					</ul>
 				</div>
 			</v-form>
 			<h2 class="fs_40 cake_pink mt-5">Мои заказы</h2>
+			{% if orders %}
+			{% for order in orders %}
+			<section class="my-2">
+				<span class="cake_blue lk__order d-flex" data-bs-toggle="modal" data-bs-target="#OrderModal2">
+					<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-clock-fill" viewBox="0 0 16 16">
+						<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+					</svg>
+					<span class="ms-1">#{{ order.id }}</span>
+				</span>
+				<aside class="modal fade" id="OrderModal2" tabindex="-1" aria-labelledby="ModalLabel2" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title cake_pink" id="ModalLabel2">#{{ order.id }}</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								{% for ingredient in order.ingredients %}
+								{% if ingredient.type == 'LV' %}
+								<span class="cake_blue">Уровней: {{ ingredient.name }}</span><br>
+								{% elif ingredient.type == 'SH' %}
+								<span class="cake_blue">Форма: {{ ingredient.name }}</span><br>
+								{% elif ingredient.type == 'TP' %}
+								<span class="cake_blue">Топпинг: {{ ingredient.name }}</span><br>
+								{% elif ingredient.type == 'BR' %}
+								<span class="cake_blue">Ягоды: {{ ingredient.name }}</span><br>
+								{% elif ingredient.type == 'DC' %}
+								<span class="cake_blue">Декор: {{ ingredient.name }}</span><br>
+								{% endif %}
+								{% endfor %}
+								<span class="cake_blue">{% if order.writing %}{{ order.writing }}{% else %}Без надписи{% endif %}</span><br>
+								<span class="cake_pink">Цена: {{order.value}}₽</span>
+							</div>
+							<div class="modal-footer d-flex justify-content-between">
+								<span class="cake_blue d-flex">Статус: В доставке</span>
+								<span class="cake_blue d-flex align-items-center">Время доставки: ?</span>
+							</div>
+						</div>
+					</div>
+				</aside>
+			</section>
+			{% endfor %}
+			{% else %}
 			<span class="cake_grey">У вас еще нет заказов.</span>
 			<p class="cake_grey">Вы можете добавить торт из <a href="./index.html#step2" class="text-decoration-none cake_pink">Каталога</a> или <a href="./index.html#step3" class="text-decoration-none cake_pink">Создать свой</a>.</p>
 			<span class="cake_grey">Есть вопросы?</span>
 			<span class="cake_grey">Воспользуйтесь нашим <a href="https://vk.com/devmanorg" class="text-decoration-none cake_pink">чат-ботом</a>.</span>
+			{% endif %}
 			<button class="btn text-white rounded-pill align-self-end px-5 mt-3 shadow-none cake__button cake__bg_pink">Выйти</button>
 		</div>
 	</div>
