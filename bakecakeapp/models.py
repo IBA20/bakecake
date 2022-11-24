@@ -55,6 +55,12 @@ class Order(models.Model):
         decimal_places=2,
         validators=[MinValueValidator(0)]
     )
+    payment_id = models.CharField(
+        'id_платежа',
+        max_length=40,
+        null=True,
+        db_index=True,
+    )
     paid = models.BooleanField(
         'Оплачен',
         db_index=True,

@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 from pathlib import Path
-
+from yookassa import Configuration
 from environs import Env
 
 env = Env()
@@ -141,3 +141,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
+
+Configuration.account_id = env('YOOKASSA_SHOP_ID')
+Configuration.secret_key = env('YOOKASSA_SECRET_KEY')
