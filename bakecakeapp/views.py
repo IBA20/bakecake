@@ -4,6 +4,7 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.shortcuts import redirect, render
+from django.conf import settings
 from users.models import CustomUser
 from yookassa import Payment
 
@@ -24,7 +25,7 @@ def create_payment(amount):
             },
             "confirmation": {
                 "type": "redirect",
-                "return_url": "https://127.0.0.1"  # TODO put valid return url
+                "return_url": settings.YOOKASSA_RETURN_URL
             },
             "description": "Оплата: торт на заказ"
         }
@@ -36,9 +37,6 @@ def index(request):
     cake_form = CreateCakeForm()
 
     if request.method == 'POST':
-        print(request.POST)
-
-        # TODO добавить валидацию формы
         if request.user.is_authenticated:
             user = request.user
         else:
@@ -67,11 +65,9 @@ def index(request):
             int(request.POST.get(field)) for field in ingred_fields if
             request.POST.get(field)
         ]
-        print(ingred_ids)
         order.value = Ingredient.objects\
             .filter(id__in=ingred_ids)\
             .aggregate(Sum('price'))['price__sum']
-        print('value: ', order.value)
         payment_id, payment_url = create_payment(order.value)
         order.payment_id = payment_id
         order.save()
