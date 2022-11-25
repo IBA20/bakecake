@@ -101,7 +101,8 @@ def profile(request):
             current_user.email = email
         current_user.save()
     current_user = request.user
-    orders = Order.objects.filter(user=current_user).prefetch_related('ingredients')
+    orders = Order.objects.filter(user=current_user)\
+                          .prefetch_related('ingredients')
     for order in orders:
         cake_parameters = {}
         for ingredient in order.ingredients.all():
