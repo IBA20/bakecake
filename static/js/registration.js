@@ -44,10 +44,27 @@ Vue.createApp({
     methods: {
         RegSubmit() {
             if (this.Step === 'Number') {
-                this.$refs.HiddenFormSubmitReg.click()
-                this.Step = 'Code'
-                this.EnteredNumber = this.RegInput
-                this.RegInput = ''
+                var formData = new FormData();
+                var error = false;
+                formData.append('phone_number', this.RegInput);
+                $.ajax({
+                    type: 'POST',
+                    url: 'register/',
+                    headers: { 'X-CSRFToken': CSRF_TOKEN },
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response){
+					if (response.phone_number_error)
+					    {
+                     	alert(response.phone_number_error);
+                     	window.location.reload();
+                     	}
+					}
+                });
+                this.Step = 'Code';
+                this.EnteredNumber = this.RegInput;
+                this.RegInput = '';
             }
             else {
                 this.$refs.HiddenFormSubmitReg.click()

@@ -85,7 +85,7 @@ def index(request):
     return render(request, 'index.html', context)
 
 
-@login_required()
+@login_required(login_url='/')
 def profile(request):
     current_user = request.user
     if request.method == 'POST':

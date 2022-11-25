@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from bakecakeapp import views
+from users import views as user_views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -26,5 +27,7 @@ urlpatterns = [
     path('profile', views.profile, name='profile'),
     path('payment', views.check_payment, name='check_payment'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
+    path('register/', user_views.register, name='register'),
+    path('login/', user_views.log_in, name='login'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
