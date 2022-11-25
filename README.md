@@ -20,6 +20,7 @@
 Переменные, необходимые для работы модуля оплаты ЮKassa:
 - `YOOKASSA_SHOP_ID` — идентификатор магазина в ЮKassa. Используется для приёма платежей - см. [документацию по созданию магазина](https://yookassa.ru/docs/support/payments/onboarding)
 - `YOOKASSA_SECRET_KEY` — секретный ключ ЮКасса, необходимый для аутентификации платежей - [документацию по выпуску ключа](https://yookassa.ru/docs/support/merchant/payouts/secret-key/)
+- `YOOKASSA_RETURN_URL` - url для возврата на сайт магазина: 'url_сайта/payment'
 
 Доступные переменные:
 - `DEBUG` — дебаг-режим. Поставьте True, чтобы увидеть отладочную информацию в случае ошибки.
