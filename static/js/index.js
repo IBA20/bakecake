@@ -117,9 +117,9 @@ Vue.createApp({
             Comments: '',
             Designed: false,
 
-            Name: '',
-            Phone: null,
-            Email: null,
+            Name: user_first_name,
+            Phone: user_phonenumber,
+            Email: user_email,
             Address: null,
             Dates: null,
             Time: null,

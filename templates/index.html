@@ -11,6 +11,9 @@
 	<script type="text/javascript">
 		var CSRF_TOKEN = '{{ csrf_token }}';
 		var registration_url = '{% url 'register' %}'
+		var user_first_name = {% if request.user.first_name %}'{{ request.user.first_name }}'{% else %}''{% endif %}
+		var user_email = {% if request.user.email %}'{{ request.user.email }}'{% else %}null{% endif %}
+		var user_phonenumber = {% if request.user.phonenumber %}'{{ request.user.phonenumber }}'{% else %}null{% endif %}
 	</script>
 	<!-- Для разработки: -->
 	<script src="https://unpkg.com/vue@3"></script>
