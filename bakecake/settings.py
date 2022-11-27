@@ -145,3 +145,6 @@ MEDIA_URL = '/media/'
 Configuration.account_id = env('YOOKASSA_SHOP_ID')
 Configuration.secret_key = env('YOOKASSA_SECRET_KEY')
 YOOKASSA_RETURN_URL = env('YOOKASSA_RETURN_URL')
+
+TG_BOT_TOKEN = env('TG_BOT_TOKEN')
+FEEDBACK_TG_ID = env('FEEDBACK_TG_ID')

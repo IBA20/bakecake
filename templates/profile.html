@@ -155,6 +155,14 @@
 			<p class="cake_grey">Вы можете добавить торт из <a href="./index.html#step2" class="text-decoration-none cake_pink">Каталога</a> или <a href="./index.html#step3" class="text-decoration-none cake_pink">Создать свой</a>.</p>
 			<span class="cake_grey">Есть вопросы?</span>
 			<span class="cake_grey">Воспользуйтесь нашим <a href="https://vk.com/devmanorg" class="text-decoration-none cake_pink">чат-ботом</a>.</span>
+
+            <form method="POST" action={% url 'feedback' %}>
+                {% csrf_token %}
+                <span class="cake_grey">Или напишите ваш отзыв здесь:</span>
+                <p><textarea rows="3" class="form-control mt-2 cake__textinput" style="resize: none" name="feedback"></textarea></p>
+                <button type="submit" class="btn text-white rounded-pill mt-3 shadow-none cake__button cake__bg_pink">Отправить</button>
+            </form>
+
 			<a class="btn text-white rounded-pill align-self-end px-5 mt-3 shadow-none cake__button cake__bg_pink" href="{% url 'logout' %}">Выйти</a>
 		</div>
 	</div>

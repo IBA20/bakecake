@@ -1,7 +1,10 @@
 import json
 from datetime import datetime
+from requests import get
+from textwrap import dedent
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
 from django.db.models import Sum
 from django.shortcuts import redirect, render
 from django.conf import settings
@@ -50,6 +53,8 @@ def index(request):
                     password='1234',
                     email=request.POST['EMAIL'],
                 )
+                login(request, user)
+
         order = Order(
             user=user,
             writing=request.POST['WORDS'],
@@ -136,3 +141,32 @@ def check_payment(request):  # Временный костыль для лока
             order.save()
 
     return redirect('/profile')
+
+
+@login_required(login_url='/')
+def handle_feedback(request):
+    user = request.user
+    if request.method == 'POST' and request.POST.get('feedback'):
+        feedback = dedent(
+            f"""
+            Клиент отправил сообщение на сайте:
+            Имя клиента: {user.first_name}
+            Телефон: {user.phonenumber}
+            e-mail: {user.email}
+            
+            Сообщение:
+            {request.POST.get('feedback')}
+            """
+        )
+        request.POST.get('feedback')
+        url = f'https://api.telegram.org/bot{settings.TG_BOT_TOKEN}/sendMessage'
+
+        response = get(
+            url, params={
+                'chat_id': settings.FEEDBACK_TG_ID,
+                'text': feedback,
+                'parse_mode': 'HTML'
+            }
+            )
+
+    return redirect('profile')
