@@ -30,6 +30,7 @@ def create_payment(amount):
                 "type": "redirect",
                 "return_url": settings.YOOKASSA_RETURN_URL
             },
+            "capture": True,
             "description": "Оплата: торт на заказ"
         }
     )
@@ -133,7 +134,7 @@ def check_payment(request):  # Временный костыль для лока
         if payment_info.paid:
             order.paid = True
             order.save()
-        elif datetime.strptime(
+        elif payment_info.status == 'canceled' or datetime.strptime(
             payment_info.expires_at,
             "%Y-%m-%dT%H:%M:%S.%fZ"
         ) < datetime.now():
