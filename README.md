@@ -20,6 +20,7 @@
 Переменные, необходимые для работы модуля оплаты ЮKassa:
 - `YOOKASSA_SHOP_ID` — идентификатор магазина в ЮKassa. Используется для приёма платежей - см. [документацию по созданию магазина](https://yookassa.ru/docs/support/payments/onboarding)
 - `YOOKASSA_SECRET_KEY` — секретный ключ ЮКасса, необходимый для аутентификации платежей - [документацию по выпуску ключа](https://yookassa.ru/docs/support/merchant/payouts/secret-key/)  
+- `YOOKASSA_RETURN_URL` - url для возврата на сайт магазина: 'url_сайта/payment'  
 
 Переменные, необходимые для получения отзывов клиента в Telegram:
 - `TG_BOT_TOKEN` — API-ключ вашего Telegram-бота. [Создать бота и получить ключ](https://t.me/BotFather)
