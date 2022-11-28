@@ -112,7 +112,13 @@
 		</aside>
 
 		<article class="row position-relative">
-			{{ costs | json_script:"costs" }}
+			{{ ingredients.costs | json_script:"costs" }}
+			{{ ingredients.levels | json_script:"levels" }}
+			{{ ingredients.form | json_script:"form" }}
+			{{ ingredients.berries | json_script:"berries" }}
+			{{ ingredients.topping | json_script:"topping" }}
+			{{ ingredients.decor | json_script:"decor" }}
+
 			<div class="col-12 col-xxl-6 d-flex justify-content-center">
 				<img src="{% static 'img/Cake.png' %}" alt="">
 			</div>
@@ -330,13 +336,13 @@
 								<div class="cake__card p-4 position-relative cake_grey">
 									{% verbatim %}
 										<span class="cake__badge rounded-pill">?</span>
-										<span>Количество уровней: {{ DATA.Levels[Levels] }}</span>
-										<span>Форма уровней: {{ DATA.Forms[Form] }}</span>
-										<p>Топинг: {{ DATA.Toppings[Topping] }}</p>
+										<span>Количество уровней: {{ Levels_computed }}</span>
+										<span>Форма уровней: {{ Form_computed }}</span>
+										<p>Топинг: {{ Topping_computed }}</p>
 										<span>Дополнительно:</span>
 										<ul>
-											<li>Ягоды: {{ DATA.Berries[Berries] }}</li>
-											<li>Декор: {{ DATA.Decors[Decor] }}</li>
+											<li>Ягоды: {{ Berries_computed }}</li>
+											<li>Декор: {{ Decor_computed }}</li>
 										</ul>
 										<span>{{ Words === '' ? 'Без надписи' : Words }}</span>
 									{% endverbatim %}

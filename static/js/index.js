@@ -98,15 +98,14 @@ Vue.createApp({
                     return ' время доставки';
                 }
             },
-            DATA: {
-                Levels: ['не выбрано', '1', '2', '3'],
-                Forms: ['не выбрано', 'Круг', 'Квадрат', 'Прямоугольник'],
-                Toppings: ['не выбрано', 'Без', 'Белый соус', 'Карамельный', 'Кленовый', 'Черничный', 'Молочный шоколад', 'Клубничный'],
-                Berries: ['нет', 'Ежевика', 'Малина', 'Голубика', 'Клубника'],
-                Decors: [ 'нет', 'Фисташки', 'Безе', 'Фундук', 'Пекан', 'Маршмеллоу', 'Марципан']
-            },
-            Costs: JSON.parse(
-                JSON.parse(document.getElementById('costs').textContent)),
+
+            Costs: JSON.parse(JSON.parse(document.getElementById('costs').textContent)),
+            Levels_data: JSON.parse(JSON.parse(document.getElementById('levels').textContent)),
+            Form_data: JSON.parse(JSON.parse(document.getElementById('form').textContent)),
+            Topping_data: JSON.parse(JSON.parse(document.getElementById('topping').textContent)),
+            Berries_data: JSON.parse(JSON.parse(document.getElementById('berries').textContent)),
+            Decor_data: JSON.parse(JSON.parse(document.getElementById('decor').textContent)),
+
             Costs_words: 500,
             Levels: 0,
             Form: 0,
@@ -143,6 +142,22 @@ Vue.createApp({
             decor = parseFloat(this.Costs[this.Decor]) || 0
 
             return levels + form + topping + berries + decor + W
-        }
+        },
+        Levels_computed() {
+            return this.Levels_data[this.Levels]
+        },
+        Form_computed() {
+            return this.Form_data[this.Form]
+        },
+        Topping_computed() {
+            return this.Topping_data[this.Topping]
+        },
+        Berries_computed() {
+            return this.Berries_data[this.Berries]
+        },
+        Decor_computed() {
+            return this.Decor_data[this.Decor]
+        },
+
     }
 }).mount('#VueApp')

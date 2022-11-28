@@ -83,10 +83,36 @@ def index(request):
             )
         return redirect(payment_url)
 
+    costs = {}
+    levels = {}
+    topping = {}
+    form = {}
+    berries = {}
+    decor = {}
+    for ingredient in Ingredient.objects.all():
+        costs[ingredient.pk] = ingredient.price
+        if ingredient.type == 'LV':
+            levels[ingredient.pk] = ingredient.name
+        elif ingredient.type == 'TP':
+            topping[ingredient.pk] = ingredient.name
+        elif ingredient.type == 'SH':
+            form[ingredient.pk] = ingredient.name
+        elif ingredient.type == 'BR':
+            berries[ingredient.pk] = ingredient.name
+        elif ingredient.type == 'DC':
+            decor[ingredient.pk] = ingredient.name
+
     context = {
         'cake_form': cake_form,
-        'costs': json.dumps(
-            {x.pk: x.price for x in Ingredient.objects.all()}, default=str)
+        'ingredients': {
+            'costs': json.dumps(costs, default=str),
+            'levels': json.dumps(levels, default=str),
+            'topping': json.dumps(topping, default=str),
+            'form': json.dumps(form, default=str),
+            'berries': json.dumps(berries, default=str),
+            'decor': json.dumps(decor, default=str),
+        }
+
     }
     return render(request, 'index.html', context)
 
@@ -154,7 +180,7 @@ def handle_feedback(request):
             Имя клиента: {user.first_name}
             Телефон: {user.phonenumber}
             e-mail: {user.email}
-            
+
             Сообщение:
             {request.POST.get('feedback')}
             """
