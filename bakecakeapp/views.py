@@ -111,7 +111,9 @@ def index(request):
             'form': json.dumps(form, default=str),
             'berries': json.dumps(berries, default=str),
             'decor': json.dumps(decor, default=str),
-        }
+        },
+        'user_name':
+            request.user.first_name if request.user.is_authenticated else 'Гость'
 
     }
     return render(request, 'index.html', context)
@@ -148,7 +150,7 @@ def profile(request):
     return render(request, 'profile.html', context)
 
 
-def check_payment(request):  # Временный костыль для локального тестирования
+def check_payment(request):  # для локального тестирования
     if not request.user.is_authenticated:
         return redirect('/')
     pending_orders = Order.objects\
@@ -194,6 +196,6 @@ def handle_feedback(request):
                 'text': feedback,
                 'parse_mode': 'HTML'
             }
-            )
+        )
 
     return redirect('profile')
